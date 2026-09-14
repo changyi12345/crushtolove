@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>မမအတွက် အထူးလက်ဆောင်</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Padauk:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    :root { --ink:#4b2940; --muted:#876675; --rose:#e95479; --rose-dark:#bf3d61; --pink:#ffd9e3; --cream:#fff9f4; --line:#f5c5d2; }
+    * { box-sizing: border-box; }
+    body { margin:0; min-height:100vh; overflow:hidden; color:var(--ink); font-family:'Padauk','Nunito',sans-serif; background:#fff4f1; }
+    body::before,body::after { content:''; position:fixed; z-index:-2; border-radius:50%; opacity:.8; }
+    body::before { width:52vw; height:52vw; left:-20vw; top:-20vw; background:#ffdce4; }
+    body::after { width:45vw; height:45vw; right:-16vw; bottom:-16vw; background:#ffe9cb; }
+    .heart-field { position:fixed; inset:0; z-index:-1; overflow:hidden; pointer-events:none; }
+    .heart { position:absolute; bottom:-30px; color:#ed7895; opacity:0; animation:float 9s linear infinite; }
+    .heart:nth-child(1){left:8%;animation-delay:0s}.heart:nth-child(2){left:23%;animation-delay:3s}.heart:nth-child(3){left:43%;animation-delay:1s}.heart:nth-child(4){left:65%;animation-delay:4s}.heart:nth-child(5){left:83%;animation-delay:2s}
+    @keyframes float { 0%{opacity:0;transform:translateY(0) rotate(0)} 15%{opacity:.6} 100%{opacity:0;transform:translateY(-110vh) rotate(35deg)} }
+    .page { min-height:100vh; display:grid; place-items:center; padding:24px; }
+    .welcome { width:min(100%,760px); padding:clamp(34px,7vw,70px) clamp(22px,7vw,70px); border:1px solid rgba(245,197,210,.9); border-radius:34px; text-align:center; background:rgba(255,255,255,.72); box-shadow:0 24px 70px rgba(114,50,78,.17); backdrop-filter:blur(12px); animation:arrive .8s ease both; }
+    @keyframes arrive { from{opacity:0;transform:translateY(18px) scale(.98)} to{opacity:1;transform:none} }
+    .eyebrow { margin:0 0 12px; color:var(--rose-dark); font-family:'Nunito',sans-serif; font-size:12px; font-weight:800; letter-spacing:.16em; text-transform:uppercase; }
+    .heart-mark { display:block; margin-bottom:12px; font-size:clamp(3rem,10vw,5rem); animation:pulse 1.4s ease-in-out infinite; }
+    @keyframes pulse { 50%{transform:scale(1.12)} }
+    h1 { margin:0; font-size:clamp(2.4rem,8vw,5rem); font-weight:700; line-height:1.2; }
+    .intro { max-width:530px; margin:18px auto 30px; color:var(--muted); font-size:clamp(15px,2.4vw,18px); line-height:1.9; }
+    .enter-button { display:inline-flex; align-items:center; justify-content:center; min-height:56px; padding:12px 30px; border:0; border-radius:99px; color:#fff; background:var(--rose); box-shadow:0 12px 26px rgba(218,72,105,.27); font:700 17px 'Padauk','Nunito',sans-serif; cursor:pointer; text-decoration:none; transition:transform .2s,background .2s,box-shadow .2s; }
+    .enter-button:hover { transform:translateY(-4px); background:var(--rose-dark); box-shadow:0 16px 30px rgba(218,72,105,.34); }
+    .credit { margin:26px 0 0; color:#a77d8e; font-family:'Nunito',sans-serif; font-size:12px; font-weight:800; letter-spacing:.08em; }
+    @media (max-width:600px) { .page{padding:14px}.welcome{border-radius:26px;padding:38px 20px 32px}.intro{line-height:1.85;margin-bottom:26px}.enter-button{width:min(100%,290px)} }
+  </style>
+</head>
+<body>
+  <div class="heart-field" aria-hidden="true"><span class="heart">♡</span><span class="heart">♥</span><span class="heart">♡</span><span class="heart">♥</span><span class="heart">♡</span></div>
+  <main class="page">
+    <section class="welcome" aria-labelledby="welcome-title">
+      <p class="eyebrow">a little surprise for you</p>
+      <span class="heart-mark">💖</span>
+      <h1 id="welcome-title">မမအတွက် အထူးလက်ဆောင်လေး</h1>
+      <p class="intro">ကျွန်တော်ရင်ထဲမှာ သိမ်းထားတဲ့ စကားလေးတစ်ခုရှိတယ်။ မမအတွက်ပဲ ပြင်ဆင်ထားတာမို့ တံခါးလေးကို ဖွင့်ပြီး ဝင်လာပေးမလား?</p>
+      <a class="enter-button" href="love.html">စာလေးဆီကို သွားမယ် ♡</a>
+      <p class="credit">Developer by Ran ♡</p>
+    </section>
+  </main>
+</body>
+</html>
