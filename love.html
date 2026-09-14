@@ -24,6 +24,9 @@
 		.password-icon { display:block; margin-bottom:8px; font-size:38px; }
 		.password-box h2 { margin-bottom:6px; font-size:2rem; }
 		.password-box p { margin:0 0 18px; color:var(--muted); line-height:1.7; }
+		.password-contact { margin-top:-6px!important; font-size:14px; }
+		.password-contact a { color:var(--rose-dark); font-weight:700; text-decoration:none; }
+		.password-contact a:hover { text-decoration:underline; }
 		.password-form { display:grid; gap:10px; }
 		.password-input { width:100%; padding:12px 16px; border:1px solid var(--line); border-radius:14px; outline:0; color:var(--ink); background:#fff; font:700 20px 'Nunito',sans-serif; text-align:center; letter-spacing:.3em; }
 		.password-input:focus { border-color:var(--rose); box-shadow:0 0 0 3px rgba(233,84,121,.13); }
@@ -131,6 +134,7 @@
 			<span class="password-icon">🔐</span>
 			<h2 id="password-title">လျှို့ဝှက်စာလေး</h2>
 			<p>စာအိတ်လေးကို ဖွင့်ဖို့ password လေးထည့်ပေးပါနော် ♡</p>
+			<p class="password-contact">Password မသိသေးရင် <a href="https://t.me/Kage_Ran" target="_blank" rel="noopener noreferrer">@Kage_Ran</a> ကို ဆက်သွယ်ပါ</p>
 			<form id="password-form" class="password-form">
 				<input id="password-input" class="password-input" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="4" placeholder="••••" aria-label="Password" autocomplete="off" required />
 				<button class="primary" type="submit">ဖွင့်မယ် ♡</button>
