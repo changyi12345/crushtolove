@@ -128,6 +128,9 @@
 	</style>
 </head>
 <body>
+	<audio id="love-song" preload="auto" loop>
+		<source src="Halfway%20Suffering.mp3" type="audio/mpeg" />
+	</audio>
 	<div id="heart-field" aria-hidden="true"></div>
 	<div id="password-modal" class="password-modal" aria-hidden="true">
 		<div class="password-box" role="dialog" aria-modal="true" aria-labelledby="password-title">
@@ -161,7 +164,7 @@
 		function renderQuestion(){document.getElementById('step-tag').textContent=`မေးခွန်း ${questionIndex+1} / ${questions.length}`;document.getElementById('question').textContent=questions[questionIndex];document.getElementById('next-button').textContent=questionButtons[questionIndex][0];document.getElementById('maybe-button').textContent=questionButtons[questionIndex][1];}
 		function openPasswordModal(){const modal=document.getElementById('password-modal');modal.classList.add('open');modal.setAttribute('aria-hidden','false');document.getElementById('password-error').textContent='';setTimeout(()=>document.getElementById('password-input').focus(),150);}
 		function openEnvelope(){const envelope=document.getElementById('envelope');if(envelope.classList.contains('open'))return;openPasswordModal();}
-		function unlockEnvelope(){const input=document.getElementById('password-input');const modal=document.getElementById('password-modal');if(input.value!=='1500'){document.getElementById('password-error').textContent='Password မမှန်သေးဘူးနော်… ထပ်စမ်းကြည့်ပါ ♡';input.select();return;}modal.classList.remove('open');modal.setAttribute('aria-hidden','true');const envelope=document.getElementById('envelope');envelope.classList.add('open');setTimeout(()=>{renderQuestion();showScreen('questions')},900);}
+		function unlockEnvelope(){const input=document.getElementById('password-input');const modal=document.getElementById('password-modal');if(input.value!=='1500'){document.getElementById('password-error').textContent='Password မမှန်သေးဘူးနော်… ထပ်စမ်းကြည့်ပါ ♡';input.select();return;}modal.classList.remove('open');modal.setAttribute('aria-hidden','true');const envelope=document.getElementById('envelope');envelope.classList.add('open');document.getElementById('love-song').play().catch(()=>{});setTimeout(()=>{renderQuestion();showScreen('questions')},900);}
 		function createFloatingHearts(){const field=document.getElementById('heart-field');for(let index=0;index<14;index+=1){const heart=document.createElement('span');heart.className='floating-heart';heart.textContent=index%3===0?'♡':'♥';heart.style.left=`${Math.random()*100}%`;heart.style.animationDelay=`${Math.random()*7}s`;heart.style.animationDuration=`${7+Math.random()*5}s`;heart.style.fontSize=`${14+Math.random()*12}px`;field.appendChild(heart);}}
 		function sparkleAt(element){const bounds=element.getBoundingClientRect();const sparkle=document.createElement('span');sparkle.className='sparkle';sparkle.textContent='✦';sparkle.style.left=`${bounds.left+bounds.width/2}px`;sparkle.style.top=`${bounds.top+bounds.height/2}px`;document.body.appendChild(sparkle);setTimeout(()=>sparkle.remove(),750);}
 		createFloatingHearts();
@@ -173,7 +176,7 @@
 		document.getElementById('maybe-button').addEventListener('click',continueProposal);
 		function dodgeNoButton(){const noButton=document.getElementById('no-button');const area=document.querySelector('.proposal-actions');const maxX=Math.max(0,area.clientWidth-noButton.offsetWidth-10);const maxY=Math.max(0,area.clientHeight-noButton.offsetHeight-10);noButton.style.position='absolute';noButton.style.left=`${Math.random()*maxX}px`;noButton.style.top=`${Math.random()*maxY}px`;yesScale=Math.min(1.48,yesScale+.08);document.getElementById('yes-button').style.transform=`scale(${yesScale})`;}
 		document.getElementById('no-button').addEventListener('pointerenter',dodgeNoButton);document.getElementById('no-button').addEventListener('focus',dodgeNoButton);document.getElementById('no-button').addEventListener('touchstart',event=>{event.preventDefault();dodgeNoButton()});document.getElementById('yes-button').addEventListener('click',event=>{sparkleAt(event.currentTarget);showScreen('celebration')});
-		document.getElementById('again-button').addEventListener('click',()=>{questionIndex=0;yesScale=1;document.getElementById('envelope').classList.remove('open');document.getElementById('no-button').removeAttribute('style');document.getElementById('yes-button').removeAttribute('style');showScreen('welcome')});
+		document.getElementById('again-button').addEventListener('click',()=>{questionIndex=0;yesScale=1;document.getElementById('envelope').classList.remove('open');document.getElementById('no-button').removeAttribute('style');document.getElementById('yes-button').removeAttribute('style');const loveSong=document.getElementById('love-song');loveSong.pause();loveSong.currentTime=0;showScreen('welcome')});
 	</script>
 </body>
 </html>
