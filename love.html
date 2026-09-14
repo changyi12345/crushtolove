@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>မမအတွက် စာလေးတစ်စောင်</title>
+	<style>
+		@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Padauk:wght@400;700&display=swap');
+		:root { --ink:#4b2940; --muted:#876675; --rose:#e95479; --rose-dark:#bf3d61; --pink:#ffd9e3; --cream:#fff9f4; --line:#f5c5d2; --shadow:0 24px 70px rgba(114,50,78,.17); }
+		* { box-sizing:border-box; }
+		body { margin:0; min-height:100vh; overflow-x:hidden; color:var(--ink); font-family:'Padauk','Nunito',sans-serif; background:#fff4f1; }
+		body::before,body::after { content:''; position:fixed; z-index:-1; border-radius:50%; opacity:.8; }
+		body::before { width:46vw; height:46vw; left:-15vw; top:-14vw; background:#ffdce4; }
+		body::after { width:40vw; height:40vw; right:-13vw; bottom:-12vw; background:#ffe9cb; }
+		#heart-field { position:fixed; inset:0; z-index:-1; overflow:hidden; pointer-events:none; }
+		.floating-heart { position:absolute; bottom:-40px; color:#ed7895; opacity:0; font-size:18px; animation:float-up 8s linear infinite; }
+		@keyframes float-up { 0% { opacity:0; transform:translateY(0) rotate(0deg) scale(.7); } 15% { opacity:.65; } 85% { opacity:.3; } 100% { opacity:0; transform:translateY(-110vh) rotate(35deg) scale(1.25); } }
+		.sparkle { position:fixed; z-index:20; pointer-events:none; color:#f2b749; font-size:20px; animation:sparkle-pop .75s ease-out forwards; }
+		@keyframes sparkle-pop { 0% { opacity:1; transform:translate(-50%,-50%) scale(.5); } 100% { opacity:0; transform:translate(-50%,-95px) scale(1.35) rotate(25deg); } }
+		.password-modal { position:fixed; inset:0; z-index:30; display:grid; place-items:center; padding:20px; background:rgba(75,41,64,.22); backdrop-filter:blur(7px); opacity:0; visibility:hidden; transition:opacity .25s,visibility .25s; }
+		.password-modal.open { opacity:1; visibility:visible; }
+		.password-box { width:min(100%,360px); padding:30px 24px 25px; border:1px solid var(--line); border-radius:24px; text-align:center; background:var(--cream); box-shadow:var(--shadow); transform:translateY(12px) scale(.96); transition:transform .25s; }
+		.password-modal.open .password-box { transform:none; }
+		.password-icon { display:block; margin-bottom:8px; font-size:38px; }
+		.password-box h2 { margin-bottom:6px; font-size:2rem; }
+		.password-box p { margin:0 0 18px; color:var(--muted); line-height:1.7; }
+		.password-form { display:grid; gap:10px; }
+		.password-input { width:100%; padding:12px 16px; border:1px solid var(--line); border-radius:14px; outline:0; color:var(--ink); background:#fff; font:700 20px 'Nunito',sans-serif; text-align:center; letter-spacing:.3em; }
+		.password-input:focus { border-color:var(--rose); box-shadow:0 0 0 3px rgba(233,84,121,.13); }
+		.password-error { min-height:23px; margin:0!important; color:var(--rose-dark)!important; font-size:14px; }
+		button { font:inherit; cursor:pointer; border:0; }
+		.app { min-height:100vh; display:grid; place-items:center; padding:30px 18px; }
+		.shell { width:min(100%,790px); text-align:center; }
+		.eyebrow { margin:0 0 12px; color:var(--rose-dark); font-size:12px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; }
+		h1,h2 { font-family:'Padauk',sans-serif; font-weight:700; }
+		h1 { margin:0; font-size:clamp(2.4rem,7vw,4.8rem); line-height:1.18; }
+		h2 { margin:0; font-size:clamp(2rem,6vw,3.55rem); line-height:1.28; }
+		.intro { max-width:520px; margin:18px auto 0; color:var(--muted); font-size:17px; line-height:1.85; }
+		.screen { display:none; animation:arrive .6s ease both; }
+		.screen.active { display:block; }
+		@keyframes arrive { from { opacity:0; transform:translateY(15px) scale(.98); } to { opacity:1; transform:none; } }
+		.envelope-wrap { margin:48px auto 10px; width:min(100%,370px); perspective:1000px; }
+		.envelope { position:relative; height:245px; border-radius:12px; background:#f487a0; box-shadow:var(--shadow); cursor:pointer; transition:transform .25s ease; }
+		.envelope:hover { transform:translateY(-6px) rotate(-1deg); }
+		.envelope::before,.envelope::after { content:''; position:absolute; bottom:0; z-index:2; border-style:solid; }
+		.envelope::before { left:0; border-width:0 0 245px 185px; border-color:transparent transparent #ee6f8c transparent; }
+		.envelope::after { right:0; border-width:245px 185px 0 0; border-color:transparent #e96383 transparent transparent; }
+		.flap { position:absolute; z-index:4; top:0; left:0; width:0; height:0; border-left:185px solid transparent; border-right:185px solid transparent; border-top:132px solid #fa9bb0; transform-origin:top center; transition:transform .8s cubic-bezier(.2,.8,.2,1); }
+		.letter { position:absolute; z-index:1; left:9%; top:20px; width:82%; height:190px; display:grid; place-items:center; padding:20px; border-radius:7px; background:var(--cream); box-shadow:0 8px 22px rgba(105,38,62,.1); transition:transform .8s cubic-bezier(.2,.8,.2,1); }
+		.letter p { margin:0; color:var(--rose-dark); font-family:'Padauk',sans-serif; font-size:23px; font-weight:700; line-height:1.45; }
+		.seal { position:absolute; z-index:5; top:106px; left:calc(50% - 25px); width:50px; height:50px; display:grid; place-items:center; border-radius:50%; color:#fff; background:var(--rose-dark); font-size:22px; box-shadow:0 7px 12px rgba(138,35,70,.18); transition:opacity .25s; }
+		.envelope.open .flap { transform:rotateX(180deg); z-index:0; }
+		.envelope.open .letter { transform:translateY(-125px); z-index:6; }
+		.envelope.open .seal { opacity:0; }
+		.hint { margin:25px 0 0; color:var(--muted); font-size:15px; line-height:1.7; }
+		.card { margin:34px auto 0; padding:clamp(25px,6vw,55px); border:1px solid rgba(245,197,210,.8); border-radius:28px; background:rgba(255,255,255,.72); box-shadow:var(--shadow); backdrop-filter:blur(12px); }
+		.step-tag { display:inline-block; margin-bottom:19px; padding:7px 13px; border-radius:99px; color:var(--rose-dark); background:var(--pink); font-size:13px; font-weight:700; }
+		.question { margin:0 auto 28px; max-width:600px; font-size:clamp(1.75rem,5vw,2.8rem); line-height:1.4; }
+		.answer-row { display:flex; justify-content:center; gap:12px; flex-wrap:wrap; }
+		.primary,.soft { min-height:52px; padding:13px 25px; border-radius:99px; font-weight:800; transition:transform .2s,box-shadow .2s,background .2s; }
+		.primary { color:#fff; background:var(--rose); box-shadow:0 10px 20px rgba(218,72,105,.24); }
+		.primary:hover { transform:translateY(-3px); box-shadow:0 14px 25px rgba(218,72,105,.3); background:var(--rose-dark); }
+		.soft { color:var(--rose-dark); background:#fff; border:1px solid var(--line); }
+		.soft:hover { transform:translateY(-3px); background:var(--pink); }
+		.proposal-card { position:relative; min-height:450px; overflow:hidden; }
+		.proposal-card .question { margin-top:45px; }
+		.proposal-copy { margin:0 auto 26px; color:var(--muted); }
+		.proposal-actions { position:relative; min-height:145px; display:flex; align-items:center; justify-content:center; gap:14px; }
+		#yes-button { position:relative; z-index:2; transition:transform .25s ease; }
+		#no-button { position:relative; z-index:3; }
+		.celebrate { position:relative; padding:45px 20px; overflow:hidden; }
+		.big-heart { display:block; margin-bottom:12px; font-size:76px; animation:pulse 1.2s infinite; }
+		.date-stamp { margin:0 0 20px; color:var(--rose-dark); font-size:14px; font-weight:800; letter-spacing:.04em; }
+		@keyframes pulse { 50% { transform:scale(1.13); } }
+		.celebrate p { max-width:460px; margin:20px auto 28px; color:var(--muted); font-size:17px; line-height:1.85; }
+		.confetti { position:absolute; inset:0; pointer-events:none; }
+		.confetti i { position:absolute; top:-20px; width:9px; height:18px; animation:fall 3.4s linear infinite; }
+		.confetti i:nth-child(1){left:8%;background:#f6b94c;animation-delay:.1s}.confetti i:nth-child(2){left:20%;background:#e95479;animation-delay:.8s}.confetti i:nth-child(3){left:35%;background:#78b8a3;animation-delay:.3s}.confetti i:nth-child(4){left:57%;background:#f6b94c;animation-delay:1.2s}.confetti i:nth-child(5){left:74%;background:#e95479;animation-delay:.5s}.confetti i:nth-child(6){left:90%;background:#78b8a3;animation-delay:1.5s}
+		@keyframes fall { to { transform:translateY(550px) rotate(490deg); opacity:0; } }
+		.credit { margin:24px 0 0; color:#a77d8e; font-size:12px; font-weight:800; letter-spacing:.08em; }
+		@media (max-width:600px) {
+			.app { padding:24px 12px 18px; align-items:start; }
+			.shell { width:100%; }
+			.eyebrow { margin-bottom:8px; font-size:11px; letter-spacing:.12em; }
+			h1 { font-size:clamp(2.15rem,11vw,3.5rem); line-height:1.25; }
+			h2 { font-size:clamp(1.85rem,9vw,2.65rem); line-height:1.42; }
+			.intro { margin-top:12px; padding:0 8px; font-size:15px; line-height:1.8; }
+			.envelope-wrap { width:min(100%,350px); margin-top:32px; }
+			.envelope { height:205px; }
+			.envelope::before { left:0; width:100%; height:100%; border:0; background:#ee6f8c; clip-path:polygon(0 0,100% 100%,0 100%); }
+			.envelope::after { right:0; width:100%; height:100%; border:0; background:#e96383; clip-path:polygon(0 100%,100% 0,100% 100%); }
+			.flap { width:100%; height:110px; border:0; background:#fa9bb0; clip-path:polygon(0 0,100% 0,50% 100%); }
+			.letter { height:165px; top:18px; padding:14px; }
+			.letter p { font-size:19px; }
+			.envelope.open .letter { transform:translateY(-92px); }
+			.hint { margin-top:20px; font-size:14px; }
+			.card { margin-top:24px; padding:26px 16px 30px; border-radius:22px; }
+			.step-tag { margin-bottom:14px; font-size:12px; }
+			.question { margin-bottom:24px; font-size:clamp(1.65rem,8.3vw,2.35rem); line-height:1.5; }
+			.answer-row { gap:10px; }
+			.primary,.soft { width:min(100%,290px); min-height:50px; padding:10px 18px; font-size:16px; }
+			.proposal-card { min-height:440px; }
+			.proposal-card .question { margin-top:18px; }
+			.proposal-copy { font-size:15px; line-height:1.85; }
+			.proposal-actions { min-height:165px; }
+			#yes-button,#no-button { max-width:44vw; padding-left:12px; padding-right:12px; }
+			.celebrate { padding:34px 16px 30px; }
+			.big-heart { font-size:64px; }
+			.celebrate p { font-size:15px; line-height:1.85; }
+			.credit { margin-top:18px; font-size:11px; }
+		}
+		@media (max-width:360px) {
+			.app { padding-left:8px; padding-right:8px; }
+			.envelope-wrap { margin-top:26px; }
+			.envelope { height:180px; }
+			.envelope::before { border-bottom-width:180px; }
+			.envelope::after { border-top-width:180px; }
+			.flap { height:95px; }
+			.letter { height:145px; }
+			.envelope.open .letter { transform:translateY(-78px); }
+			.card { padding-left:12px; padding-right:12px; }
+			.question { font-size:1.55rem; }
+			#yes-button,#no-button { max-width:46vw; font-size:14px; }
+		}
+	</style>
+</head>
+<body>
+	<div id="heart-field" aria-hidden="true"></div>
+	<div id="password-modal" class="password-modal" aria-hidden="true">
+		<div class="password-box" role="dialog" aria-modal="true" aria-labelledby="password-title">
+			<span class="password-icon">🔐</span>
+			<h2 id="password-title">လျှို့ဝှက်စာလေး</h2>
+			<p>စာအိတ်လေးကို ဖွင့်ဖို့ password လေးထည့်ပေးပါနော် ♡</p>
+			<form id="password-form" class="password-form">
+				<input id="password-input" class="password-input" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="4" placeholder="••••" aria-label="Password" autocomplete="off" required />
+				<button class="primary" type="submit">ဖွင့်မယ် ♡</button>
+				<p id="password-error" class="password-error" aria-live="polite"></p>
+			</form>
+		</div>
+	</div>
+	<main class="app"><div class="shell">
+		<section id="welcome-screen" class="screen active"><p class="eyebrow">a little note from my heart</p><h1>မမအတွက် စာလေးတစ်စောင်</h1><p class="intro">တစ်ခါတလေ ရင်ထဲကစကားတွေကို မျက်နှာချင်းဆိုင်ပြောဖို့ ခက်တတ်တယ်။ ဒါကြောင့် ဒီစာလေးထဲမှာ ကျွန်တော်ရဲ့ခံစားချက်တွေကို သေချာထည့်ပေးထားတယ်။</p><div class="envelope-wrap"><div id="envelope" class="envelope" role="button" tabindex="0" aria-label="စာအိတ်ကို ဖွင့်ရန်"><div class="flap"></div><div class="letter"><p>မမကို ပြောချင်တာလေး… ♡</p></div><div class="seal">♡</div></div></div><p class="hint">မမအတွက်ပဲ ရေးထားတဲ့စာကို ဖွင့်ကြည့်ပါ</p></section>
+		<section id="question-screen" class="screen"><p class="eyebrow">just a few little questions</p><div class="card"><span id="step-tag" class="step-tag">မေးခွန်း ၁ / ၅</span><h2 id="question" class="question"></h2><div class="answer-row"><button id="next-button" class="primary" type="button">ပျော်တယ် ♡</button><button id="maybe-button" class="soft" type="button">နည်းနည်းတော့ ♡</button></div></div></section>
+		<section id="proposal-screen" class="screen"><p class="eyebrow">one last question</p><div class="card proposal-card"><h2 class="question">မမက ကျွန်တော်ရဲ့ချစ်သူ ဖြစ်ပေးမလား?</h2><p class="proposal-copy">မမနဲ့စကားပြောရတဲ့နေ့တွေက ကျွန်တော်အတွက် ပိုလှလာတယ်။ ဒီနေ့ကစပြီး ကျွန်တော်ဘေးမှာ အထူးလူတစ်ယောက်အဖြစ် ရှိပေးမလား? ♡</p><div class="proposal-actions"><button id="yes-button" class="primary" type="button">သဘောတူတယ် ♡</button><button id="no-button" class="soft" type="button">မတူဘူး</button></div></div></section>
+		<section id="celebration-screen" class="screen"><div class="card celebrate"><div class="confetti" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div><span class="big-heart">💖</span><h2>ကျွန်တော်ရဲ့နေ့လေး အလှဆုံးဖြစ်သွားပြီ!</h2><p>မမရဲ့အဖြေကြောင့် ဒီနေ့က ကျွန်တော်အတွက် အမှတ်တရအရှိဆုံးနေ့ ဖြစ်သွားပြီ။ ရှေ့ဆက်မယ့်နေ့ရက်တိုင်းကို မမနဲ့အတူ လှပအောင် ဖြတ်သန်းချင်တယ် ♡</p><p id="date-stamp" class="date-stamp"></p><button id="again-button" class="soft" type="button">အစကနေ ပြန်ဖတ်မယ်</button></div></section>
+	  </div><p class="credit">Developer by Ran ♡</p></main>
+	<script>
+		const screens={welcome:document.getElementById('welcome-screen'),questions:document.getElementById('question-screen'),proposal:document.getElementById('proposal-screen'),celebration:document.getElementById('celebration-screen')};
+		const questions=['ကျွန်တော်နဲ့ စကားပြောတဲ့အခါ မမလည်း နည်းနည်းတော့ ပျော်မိတယ်မဟုတ်လား?','ကျွန်တော်နဲ့အတူရှိတဲ့ အချိန်လေးတွေကို မမလည်း တန်ဖိုးထားမိတယ်မဟုတ်လား?','မမရဲ့အပြုံးလေးကို မြင်ရတိုင်း ကျွန်တော်လည်း ပျော်မိတာ မမသိလား?','မမအနားမှာ ရှိနေရတာက ကျွန်တော်အတွက် အထူးဖြစ်နေပြီဆိုတာ ယုံလား?','ကျွန်တော်ရင်ထဲက စကားလေးကို နားထောင်ပေးမလား?'];
+		const questionButtons=[['ပျော်တယ် ♡','နည်းနည်းတော့ ♡'],['တန်ဖိုးထားတယ် ♡','အင်း… ထားတယ် ♡'],['သိတယ် ♡','အခုမှသိတယ် ♡'],['ယုံတယ် ♡','စဉ်းစားမယ် ♡'],['နားထောင်မယ် ♡','ပြောပါ ♡']];
+		let questionIndex=0; let yesScale=1;
+		const burmeseMonths=['ဇန်နဝါရီ','ဖေဖော်ဝါရီ','မတ်','ဧပြီ','မေ','ဇွန်','ဇူလိုင်','ဩဂုတ်','စက်တင်ဘာ','အောက်တိုဘာ','နိုဝင်ဘာ','ဒီဇင်ဘာ'];
+		const toBurmeseDigits=value=>String(value).replace(/[0-9]/g,digit=>'၀၁၂၃၄၅၆၇၈၉'[digit]);
+		const today=new Date();
+		document.getElementById('date-stamp').textContent=`ဒီနေ့၊ ${toBurmeseDigits(today.getDate())} ${burmeseMonths[today.getMonth()]} ${toBurmeseDigits(today.getFullYear())}`;
+		function showScreen(screen){Object.values(screens).forEach(item=>item.classList.remove('active'));screens[screen].classList.add('active');}
+		function renderQuestion(){document.getElementById('step-tag').textContent=`မေးခွန်း ${questionIndex+1} / ${questions.length}`;document.getElementById('question').textContent=questions[questionIndex];document.getElementById('next-button').textContent=questionButtons[questionIndex][0];document.getElementById('maybe-button').textContent=questionButtons[questionIndex][1];}
+		function openPasswordModal(){const modal=document.getElementById('password-modal');modal.classList.add('open');modal.setAttribute('aria-hidden','false');document.getElementById('password-error').textContent='';setTimeout(()=>document.getElementById('password-input').focus(),150);}
+		function openEnvelope(){const envelope=document.getElementById('envelope');if(envelope.classList.contains('open'))return;openPasswordModal();}
+		function unlockEnvelope(){const input=document.getElementById('password-input');const modal=document.getElementById('password-modal');if(input.value!=='1500'){document.getElementById('password-error').textContent='Password မမှန်သေးဘူးနော်… ထပ်စမ်းကြည့်ပါ ♡';input.select();return;}modal.classList.remove('open');modal.setAttribute('aria-hidden','true');const envelope=document.getElementById('envelope');envelope.classList.add('open');setTimeout(()=>{renderQuestion();showScreen('questions')},900);}
+		function createFloatingHearts(){const field=document.getElementById('heart-field');for(let index=0;index<14;index+=1){const heart=document.createElement('span');heart.className='floating-heart';heart.textContent=index%3===0?'♡':'♥';heart.style.left=`${Math.random()*100}%`;heart.style.animationDelay=`${Math.random()*7}s`;heart.style.animationDuration=`${7+Math.random()*5}s`;heart.style.fontSize=`${14+Math.random()*12}px`;field.appendChild(heart);}}
+		function sparkleAt(element){const bounds=element.getBoundingClientRect();const sparkle=document.createElement('span');sparkle.className='sparkle';sparkle.textContent='✦';sparkle.style.left=`${bounds.left+bounds.width/2}px`;sparkle.style.top=`${bounds.top+bounds.height/2}px`;document.body.appendChild(sparkle);setTimeout(()=>sparkle.remove(),750);}
+		createFloatingHearts();
+		document.getElementById('envelope').addEventListener('click',openEnvelope);document.getElementById('envelope').addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' ')openEnvelope()});
+		document.getElementById('password-form').addEventListener('submit',event=>{event.preventDefault();unlockEnvelope()});
+		document.getElementById('envelope').addEventListener('click',event=>sparkleAt(event.currentTarget));
+		function continueProposal(event){sparkleAt(event.currentTarget);if(questionIndex<questions.length-1){questionIndex+=1;renderQuestion()}else showScreen('proposal');}
+		document.getElementById('next-button').addEventListener('click',continueProposal);
+		document.getElementById('maybe-button').addEventListener('click',continueProposal);
+		function dodgeNoButton(){const noButton=document.getElementById('no-button');const area=document.querySelector('.proposal-actions');const maxX=Math.max(0,area.clientWidth-noButton.offsetWidth-10);const maxY=Math.max(0,area.clientHeight-noButton.offsetHeight-10);noButton.style.position='absolute';noButton.style.left=`${Math.random()*maxX}px`;noButton.style.top=`${Math.random()*maxY}px`;yesScale=Math.min(1.48,yesScale+.08);document.getElementById('yes-button').style.transform=`scale(${yesScale})`;}
+		document.getElementById('no-button').addEventListener('pointerenter',dodgeNoButton);document.getElementById('no-button').addEventListener('focus',dodgeNoButton);document.getElementById('no-button').addEventListener('touchstart',event=>{event.preventDefault();dodgeNoButton()});document.getElementById('yes-button').addEventListener('click',event=>{sparkleAt(event.currentTarget);showScreen('celebration')});
+		document.getElementById('again-button').addEventListener('click',()=>{questionIndex=0;yesScale=1;document.getElementById('envelope').classList.remove('open');document.getElementById('no-button').removeAttribute('style');document.getElementById('yes-button').removeAttribute('style');showScreen('welcome')});
+	</script>
+</body>
+</html>
